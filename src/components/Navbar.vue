@@ -5,18 +5,42 @@
       <span class="text-uppercase primary--text font-weight-light">Todo</span>
       <span class="text-uppercase primary--text">Ninja</span>
       <v-spacer></v-spacer>
+      <div class="pr-2 text-center">
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn color="primary" text rounded outlined v-bind="attrs" v-on="on">
+              <span>Menu</span>
+              <v-icon right>mdi-chevron-down</v-icon>
+            </v-btn>
+          </template>
+          <v-list dense rounded>
+            <v-list-item
+              v-for="(item, index) in links"
+              :key="index"
+              router
+              :to="item.route"
+              color="primary"
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
       <v-btn text rounded outlined color="primary">
         <span>Sign out</span>
         <v-icon right>mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-navigation-drawer app color="indigo darken-4" v-model="drawer">
+    <v-navigation-drawer app color="indigo darken-4" v-model="drawer" width="200">
       <v-layout column align-center>
         <v-flex class="mt-5">
           <v-avatar size="100">
             <v-img src="/avatar-1.png"></v-img>
           </v-avatar>
           <p class="white--text subtitle-1 mt-1">The Net Ninja</p>
+        </v-flex>
+        <v-flex class="mt-4 mb-3">
+          <Popup />
         </v-flex>
       </v-layout>
       <v-list shaped>
@@ -29,26 +53,16 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-      <!-- <v-list shaped>
-      // check the v-list gives error in the console
-        <v-subheader>REPORTS</v-subheader>
-        <v-list-item-group v-model="links">
-          <v-list-item v-for="(item, i) in links" :key="i" router :to="item.route">
-            <v-list-item-icon>
-              <v-icon v-text="item.icon"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title v-text="item.title"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>-->
     </v-navigation-drawer>
   </nav>
 </template>
 
 <script>
+import Popup from "./Popup";
 export default {
+  components: {
+    Popup
+  },
   data() {
     return {
       drawer: true,
@@ -68,7 +82,8 @@ export default {
           title: "Team",
           route: "/team"
         }
-      ]
+      ],
+      dropdown_font: ["Arial", "Times New Roman", "Calibri", "Roboto"]
     };
   },
   method: {}
