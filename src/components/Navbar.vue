@@ -1,6 +1,12 @@
 <template>
   <nav>
     <v-app-bar app class="grey lighten-5">
+      <v-snackbar v-model="snackbar" :timeout="5000" top dark>
+        <span>Awesome! You added a new project</span>
+        <v-btn fab x-small outlined color="pink" @click="snackbar = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-snackbar>
       <v-app-bar-nav-icon class="primary--text" @click="drawer=!drawer"></v-app-bar-nav-icon>
       <span class="text-uppercase primary--text font-weight-light">Todo</span>
       <span class="text-uppercase primary--text">Ninja</span>
@@ -8,7 +14,7 @@
       <div class="pr-2 text-center">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary" text rounded outlined v-bind="attrs" v-on="on">
+            <v-btn color="primary" rounded outlined v-bind="attrs" v-on="on">
               <span>Menu</span>
               <v-icon right>mdi-chevron-down</v-icon>
             </v-btn>
@@ -26,7 +32,7 @@
           </v-list>
         </v-menu>
       </div>
-      <v-btn text rounded outlined color="primary">
+      <v-btn rounded outlined color="primary">
         <span>Sign out</span>
         <v-icon right>mdi-logout</v-icon>
       </v-btn>
@@ -40,7 +46,7 @@
           <p class="white--text subtitle-1 mt-1">The Net Ninja</p>
         </v-flex>
         <v-flex class="mt-4 mb-3">
-          <Popup />
+          <Popup @projectAdded="snackbar = true" />
         </v-flex>
       </v-layout>
       <v-list shaped>
@@ -49,7 +55,7 @@
             <v-icon class="white--text">{{link.icon}}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-tile-title class="white--text">{{link.title}}</v-list-tile-title>
+            <v-list-item-title class="white--text">{{link.title}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -60,11 +66,13 @@
 <script>
 import Popup from "./Popup";
 export default {
+  name: "Navbar",
   components: {
     Popup
   },
   data() {
     return {
+      snackbar: false,
       drawer: true,
       links: [
         {

@@ -3,10 +3,10 @@
     <h1 class="subheading grey--text">Projects</h1>
     <v-container class="my-5">
       <v-expansion-panels focusable inset popup>
-        <v-expansion-panel v-for="item in myProjects" :key="item.title">
-          <v-expansion-panel-header>{{item.title}}</v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-card-text class="px-4 grey--text">
+        <v-expansion-panel v-for="item in myProjects" :key="item.id" class="grey lighten-4">
+          <v-expansion-panel-header class="indigo--text">{{item.title}}</v-expansion-panel-header>
+          <v-expansion-panel-content class="grey lighten-4">
+            <v-card-text class="px-4">
               <div class="font-weight-bold">{{item.due}}</div>
               <div>{{item.content}}</div>
             </v-card-text>
@@ -18,60 +18,12 @@
 </template>
 
 <script>
+import db from "@/fb";
 export default {
   name: "Projects",
   data() {
     return {
-      projects: [
-        {
-          title: "Design a new Website",
-          person: "The New Ninja",
-          due: "1-01-2019",
-          status: "ongoing",
-          content:
-            "Lorem, ipsum dolor sit amet consectetur adipisicing elit. In vero corrupti aspernatur deleniti alias reiciendis accusamus temporibus ipsum aperiam, non eum eligendi, totam ullam iure optio doloribus autem. Exercitationem, ducimus."
-        },
-        {
-          title: "Design a new Website",
-          person: "The New Ninja",
-          due: "1-01-2019",
-          status: "ongoing",
-          content:
-            "Lorem, ipsum dolor sit amet consectetur adipisicing elit. In vero corrupti aspernatur deleniti alias reiciendis accusamus temporibus ipsum aperiam, non eum eligendi, totam ullam iure optio doloribus autem. Exercitationem, ducimus."
-        },
-        {
-          title: "Design a new Website",
-          person: "The New Ninja",
-          due: "1-01-2019",
-          status: "ongoing",
-          content:
-            "Lorem, ipsum dolor sit amet consectetur adipisicing elit. In vero corrupti aspernatur deleniti alias reiciendis accusamus temporibus ipsum aperiam, non eum eligendi, totam ullam iure optio doloribus autem. Exercitationem, ducimus."
-        },
-        {
-          title: "Code up the homepage",
-          person: "Chun Li",
-          due: "1-01-2020",
-          status: "complete",
-          content:
-            "Lorem, ipsum dolor sit amet consectetur adipisicing elit. In vero corrupti aspernatur deleniti alias reiciendis accusamus temporibus ipsum aperiam, non eum eligendi, totam ullam iure optio doloribus autem. Exercitationem, ducimus."
-        },
-        {
-          title: "Design video thumbnails",
-          person: "The Newbie",
-          due: "10-01-2020",
-          status: "ongoing",
-          content:
-            "Lorem, ipsum dolor sit amet consectetur adipisicing elit. In vero corrupti aspernatur deleniti alias reiciendis accusamus temporibus ipsum aperiam, non eum eligendi, totam ullam iure optio doloribus autem. Exercitationem, ducimus."
-        },
-        {
-          title: "Create a community forum",
-          person: "The Old Ninja",
-          due: "21-02-2020",
-          status: "overdue",
-          content:
-            "Lorem, ipsum dolor sit amet consectetur adipisicing elit. In vero corrupti aspernatur deleniti alias reiciendis accusamus temporibus ipsum aperiam, non eum eligendi, totam ullam iure optio doloribus autem. Exercitationem, ducimus."
-        }
-      ]
+      projects: []
     };
   },
   computed: {
@@ -80,6 +32,19 @@ export default {
         return item.person == "The New Ninja";
       });
     }
+  },
+  created() {
+    db.collection("projects").onSnapshot(response => {
+      const changes = response.docChanges();
+      changes.forEach(change => {
+        if (change.type === "added") {
+          this.projects.push({
+            ...change.doc.data(),
+            id: change.doc.id
+          });
+        }
+      });
+    });
   }
 };
 </script>

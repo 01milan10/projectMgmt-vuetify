@@ -12,6 +12,7 @@
     "core-js": "^3.6.5",
     "css-loader": "^3.5.3",
     "date-fns": "^2.14.0",
+    "firebase": "^7.15.0",
     "material-design-icons-iconfont": "^5.0.1",
     "moment": "^2.26.0",
     "vue": "^2.6.11",

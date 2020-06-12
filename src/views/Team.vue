@@ -14,14 +14,14 @@
               <div class="subtitle-1 primary--text lighten-4">{{person.name}}</div>
               <div class="grey--text">{{person.role}}</div>
             </v-card-text>
-            <v-card-action>
+            <v-card-actions>
               <div align="left">
                 <v-btn small text color="grey" rounded>
                   <v-icon small left>mdi-message-text</v-icon>
                   <span>message</span>
                 </v-btn>
               </div>
-            </v-card-action>
+            </v-card-actions>
           </v-card>
         </v-flex>
       </v-layout>

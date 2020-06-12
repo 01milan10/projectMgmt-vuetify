@@ -20,7 +20,7 @@
           </template>
           <span>Show projects by project name</span>
         </v-tooltip>
-        <v-tooltip nudge-left color="primary">
+        <v-tooltip top>
           <template v-slot:activator="{on, attrs}">
             <v-btn
               small
@@ -55,22 +55,43 @@
           <span>Show projects by due date</span>
         </v-tooltip>
       </v-layout>
-      <v-card flat v-for="project in projects" :key="project.title" class="px-3 grey lighten-3">
+      <v-card flat v-for="project in projects" :key="project.id" class="px-3 grey lighten-3">
         <v-layout row wrap :class="`pa-3 project ${project.status}`">
           <v-flex xs12 md6>
-            <div class="caption grey--text">Project title</div>
-            <div>{{project.title}}</div>
+            <v-card fluid flat class="mr-5 grey lighten-4">
+              <v-card-text>
+                <div class="caption grey--text">Project title</div>
+                {{project.title}}
+              </v-card-text>
+            </v-card>
           </v-flex>
           <v-flex xs6 sm4 md2>
-            <div class="caption grey--text">Developer</div>
-            <div>{{project.person}}</div>
+            <v-card flat class="mr-5 grey lighten-4">
+              <v-card-text>
+                <div class="caption grey--text">Developer</div>
+                <div>{{project.person}}</div>
+              </v-card-text>
+            </v-card>
           </v-flex>
           <v-flex xs6 sm4 md2>
-            <div class="caption grey--text">Due Date</div>
-            <div>{{project.due}}</div>
+            <v-card flat class="mr-5 grey lighten-4">
+              <v-card-text>
+                <div class="caption grey--text">Due Date</div>
+                <div>{{project.due}}</div>
+              </v-card-text>
+            </v-card>
           </v-flex>
           <v-flex xs2 sm4 md2>
             <div align="right">
+              <v-chip
+                v-if="project.badge"
+                outlined
+                close
+                small
+                class="mr-3"
+                color="red"
+                @click:close="project.badge=false"
+              >{{project.badge}}</v-chip>
               <v-chip small :class="`white--text caption my-2 ${project.status}`">{{project.status}}</v-chip>
             </div>
           </v-flex>
@@ -82,50 +103,31 @@
 </template>
 
 <script>
+import db from "@/fb";
 export default {
   name: "Dashboard",
   data() {
     return {
-      projects: [
-        {
-          title: "Design a new Website",
-          person: "The New Ninja",
-          due: "1-01-2019",
-          status: "ongoing",
-          content:
-            "Lorem, ipsum dolor sit amet consectetur adipisicing elit. In vero corrupti aspernatur deleniti alias reiciendis accusamus temporibus ipsum aperiam, non eum eligendi, totam ullam iure optio doloribus autem. Exercitationem, ducimus."
-        },
-        {
-          title: "Code up the homepage",
-          person: "Chun Li",
-          due: "1-01-2020",
-          status: "complete",
-          content:
-            "Lorem, ipsum dolor sit amet consectetur adipisicing elit. In vero corrupti aspernatur deleniti alias reiciendis accusamus temporibus ipsum aperiam, non eum eligendi, totam ullam iure optio doloribus autem. Exercitationem, ducimus."
-        },
-        {
-          title: "Design video thumbnails",
-          person: "The Newbie",
-          due: "10-01-2020",
-          status: "ongoing",
-          content:
-            "Lorem, ipsum dolor sit amet consectetur adipisicing elit. In vero corrupti aspernatur deleniti alias reiciendis accusamus temporibus ipsum aperiam, non eum eligendi, totam ullam iure optio doloribus autem. Exercitationem, ducimus."
-        },
-        {
-          title: "Create a community forum",
-          person: "The Old Ninja",
-          due: "21-02-2020",
-          status: "overdue",
-          content:
-            "Lorem, ipsum dolor sit amet consectetur adipisicing elit. In vero corrupti aspernatur deleniti alias reiciendis accusamus temporibus ipsum aperiam, non eum eligendi, totam ullam iure optio doloribus autem. Exercitationem, ducimus."
-        }
-      ]
+      projects: []
     };
   },
   methods: {
     sortBy(prop) {
       this.projects.sort((a, b) => (a[prop] < b[prop] ? -1 : 1));
     }
+  },
+  created() {
+    db.collection("projects").onSnapshot(response => {
+      const changes = response.docChanges();
+      changes.forEach(change => {
+        if (change.type === "added") {
+          this.projects.push({
+            ...change.doc.data(),
+            id: change.doc.id
+          });
+        }
+      });
+    });
   }
 };
 </script>
