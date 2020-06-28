@@ -14,7 +14,7 @@
       <div class="pr-2 text-center">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary" rounded outlined v-bind="attrs" v-on="on">
+            <v-btn color="primary" v-bind="attrs" v-on="on">
               <span>Menu</span>
               <v-icon right>mdi-chevron-down</v-icon>
             </v-btn>
@@ -37,7 +37,7 @@
         <v-icon right>mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-navigation-drawer app color="indigo darken-4" v-model="drawer" width="200">
+    <v-navigation-drawer app right color="indigo darken-4" v-model="drawer" width="200">
       <v-layout column align-center>
         <v-flex class="mt-5">
           <v-avatar size="100">

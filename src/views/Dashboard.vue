@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <h1 class="subheading grey--text">Dashboard</h1>
-    <v-container class="my-5">
+    <v-container fluid class="grey my-5">
       <v-layout row class="md-3">
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
